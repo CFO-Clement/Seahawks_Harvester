@@ -47,4 +47,5 @@ This code have to collect metrics from hardware and send it to the Nester though
     ]
   },
   "nmapScanOutput": "raw_nmap_output_here"
-}```
+}
+```
