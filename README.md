@@ -1,4 +1,4 @@
-# Harverster
+# Harvester
 This code is meant to run on a `Raspberry Pi` served by `Ubuntu 22` through `Docker`.
 This code have to collect metrics from hardware and send it to the Nester though an SHH tunnel to access the NoSQL DataBase.
 
