@@ -31,7 +31,7 @@ class TCPServer:
         # Handle an individual client connection
         try:
             while True:
-                message = client_socket.recv(1024).decode('utf-8')
+                message = client_socke∏t.recv(1024).decode('utf-8')
                 if not message:
                     break
 
