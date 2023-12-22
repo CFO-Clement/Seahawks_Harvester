@@ -3,7 +3,7 @@ import psutil
 import nmap
 from datetime import datetime
 
-class MetrixCollector:
+class MetricCollector:
     def __init__(self, collector_name):
         self.collector_name = collector_name
         self.nm = nmap.PortScanner()
