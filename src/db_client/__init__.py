@@ -17,4 +17,4 @@ db_client.close()
 """
 
 
-from .client import DBClient
+from .db_client import DBClient
