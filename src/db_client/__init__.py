@@ -16,5 +16,4 @@ db_client.insert_data(data)
 db_client.close()
 """
 
-
 from .db_client import DBClient
