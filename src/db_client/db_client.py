@@ -6,6 +6,8 @@ from pymongo.errors import ConnectionFailure
 class DBClient:
     def __init__(self, uri, db_name, collection_name):
         self.client = MongoClient(uri)
+        print(f"Connected to MongoDB at {uri}")
+        print(self.client)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
