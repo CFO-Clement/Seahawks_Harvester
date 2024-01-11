@@ -2,3 +2,4 @@ psutil==5.9.4
 python-nmap
 pymongo
 colorama
+requests

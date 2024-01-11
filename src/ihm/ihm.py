@@ -29,7 +29,6 @@ class SystemMetricsDashboard(tk.Tk):
 
     def update_metrics(self):
         while True:
-            log.debug("Updating metrics")
             cpu_percent = psutil.cpu_percent()
             ram_percent = psutil.virtual_memory().percent
             disk_percent = psutil.disk_usage('/').percent
@@ -39,7 +38,6 @@ class SystemMetricsDashboard(tk.Tk):
             self.disk_label.config(text=f"Disk Usage: {disk_percent}%")
 
             self.update()
-            log.debug("Metrics updated")
             time.sleep(1)
 
     def start_dashboard(self):

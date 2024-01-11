@@ -6,6 +6,13 @@ import psutil
 
 from logger import Log
 
+
+import platform
+import socket
+import uuid
+import psutil
+import requests
+
 log = Log("collector")
 
 
@@ -69,3 +76,66 @@ class MetricCollector:
         }
         log.info("JSON generated")
         return json.dumps(data, indent=2)
+
+    @staticmethod
+    def get_system_info():
+        try:
+            info = {}
+
+            # Système d'exploitation, version, et détails du hardware
+            info['os'] = platform.system()
+            info['os_version'] = platform.version()
+            info['processor'] = platform.processor()
+            info['architecture'] = platform.machine()
+            info['physical_cores'] = psutil.cpu_count(logical=False)
+            info['total_memory'] = psutil.virtual_memory().total
+
+            # Uptime
+            info['uptime'] = psutil.boot_time()
+
+            # Adresse MAC et IP
+            info['mac_address'] = ':'.join(
+                ['{:02x}'.format((uuid.getnode() >> elements) & 0xff) for elements in range(0, 2 * 6, 2)][::-1])
+            info['private_ip'] = socket.gethostbyname(socket.gethostname())
+            info['public_ip'] = requests.get('https://api.ipify.org').text
+
+            # Espace disque
+            disk_partitions = psutil.disk_partitions()
+            for partition in disk_partitions:
+                usage = psutil.disk_usage(partition.mountpoint)
+                info[f"{partition.device} Total"] = usage.total
+                info[f"{partition.device} Used"] = usage.used
+                info[f"{partition.device} Free"] = usage.free
+
+            # Informations sur la batterie
+            if hasattr(psutil, "sensors_battery"):
+                battery = psutil.sensors_battery()
+                if battery:
+                    info['battery_percent'] = battery.percent
+                    info['battery_secsleft'] = battery.secsleft
+                    info['battery_power_plugged'] = battery.power_plugged
+
+            # Informations sur les processus en cours
+            info['active_processes'] = [p.info for p in psutil.process_iter(attrs=['pid', 'name'])]
+
+            # Informations réseau
+            net_info = psutil.net_if_addrs()
+            for interface_name, interface_addresses in net_info.items():
+                for address in interface_addresses:
+                    if str(address.family) == 'AddressFamily.AF_INET':
+                        info[interface_name + '_IP'] = address.address
+                    elif str(address.family) == 'AddressFamily.AF_PACKET':
+                        info[interface_name + '_MAC'] = address.address
+
+            # Informations sur les températures (si disponible)
+            if hasattr(psutil, "sensors_temperatures"):
+                temps = psutil.sensors_temperatures()
+                if temps:
+                    for name, entries in temps.items():
+                        for entry in entries:
+                            info[f"{name}_{entry.label}"] = entry.current
+
+            return info
+        except Exception as e:
+            return str(e)
+
