@@ -1,17 +1,14 @@
 import json
+import platform
+import socket
+import uuid
 from datetime import datetime
 
 import nmap
 import psutil
+import requests
 
 from logger import Log
-
-
-import platform
-import socket
-import uuid
-import psutil
-import requests
 
 log = Log("collector")
 
@@ -138,4 +135,3 @@ class MetricCollector:
             return info
         except Exception as e:
             return str(e)
-

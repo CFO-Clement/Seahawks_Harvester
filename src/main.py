@@ -17,7 +17,6 @@ uri = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017/")
 db_name = os.getenv("MONGO_DB_NAME", "mongo")
 collection_name = "metrics"
 
-
 metric_collector = MetricCollector(collector_name=harvester_id + "__" + str(nester_port))
 # db_client = DBClient(uri, db_name, collection_name)
 app = SystemMetricsDashboard()
