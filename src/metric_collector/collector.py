@@ -51,15 +51,8 @@ class MetricCollector:
         log.debug("Disk metrics collected")
         return disks
 
-    def run_nmap_scan(self, nmap_input):
-        log.debug("Running Nmap scan")
-        self.nm.scan(hosts=nmap_input, arguments='-v')
-        log.info("Nmap scan completed")
-        return self.nm.command_line(), str(self.nm.all_hosts())
-
-    def generate_json(self, nmap_input):
+    def generate_json(self):
         log.debug("Generating JSON")
-        nmap_command, nmap_results = self.run_nmap_scan(nmap_input)
         data = {
             "collectorName": self.collector_name,
             "timeOfCollect": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -68,18 +61,17 @@ class MetricCollector:
                 "memory": self.collect_memory_metrics(),
                 "disk": self.collect_disk_metrics()
             },
-            "nmapScanInput": nmap_command,
-            "nmapScanOutput": nmap_results
         }
         log.info("JSON generated")
         return json.dumps(data, indent=2)
 
     @staticmethod
     def get_system_info():
+        log.debug("Getting system info")
         try:
             info = {}
-
             # Système d'exploitation, version, et détails du hardware
+            log.debug("Getting OS info")
             info['os'] = platform.system()
             info['os_version'] = platform.version()
             info['processor'] = platform.processor()
@@ -88,15 +80,18 @@ class MetricCollector:
             info['total_memory'] = psutil.virtual_memory().total
 
             # Uptime
+            log.debug("Getting uptime")
             info['uptime'] = psutil.boot_time()
 
             # Adresse MAC et IP
+            log.debug("Getting MAC and IP addresses")
             info['mac_address'] = ':'.join(
                 ['{:02x}'.format((uuid.getnode() >> elements) & 0xff) for elements in range(0, 2 * 6, 2)][::-1])
             info['private_ip'] = socket.gethostbyname(socket.gethostname())
-            info['public_ip'] = requests.get('https://api.ipify.org').text
+            info['public_ip'] = "my ip" #requests.get('https://api.ipify.org').text
 
             # Espace disque
+            log.debug("Getting disk space")
             disk_partitions = psutil.disk_partitions()
             for partition in disk_partitions:
                 usage = psutil.disk_usage(partition.mountpoint)
@@ -105,6 +100,7 @@ class MetricCollector:
                 info[f"{partition.device} Free"] = usage.free
 
             # Informations sur la batterie
+            log.debug("Getting battery info")
             if hasattr(psutil, "sensors_battery"):
                 battery = psutil.sensors_battery()
                 if battery:
@@ -113,9 +109,16 @@ class MetricCollector:
                     info['battery_power_plugged'] = battery.power_plugged
 
             # Informations sur les processus en cours
-            info['active_processes'] = [p.info for p in psutil.process_iter(attrs=['pid', 'name'])]
+            log.debug("Getting running processes")
+            processes = []
+            for process in psutil.process_iter(attrs=['pid', 'name', 'memory_percent']):
+                processes.append(process.info)
+
+            processes.sort(key=lambda x: x['memory_percent'] if x['memory_percent'] is not None else 0, reverse=True)
+            info['processes'] = processes[:10]
 
             # Informations réseau
+            log.debug("Getting network info")
             net_info = psutil.net_if_addrs()
             for interface_name, interface_addresses in net_info.items():
                 for address in interface_addresses:
@@ -125,13 +128,15 @@ class MetricCollector:
                         info[interface_name + '_MAC'] = address.address
 
             # Informations sur les températures (si disponible)
+            log.debug("Getting temperature info")
             if hasattr(psutil, "sensors_temperatures"):
                 temps = psutil.sensors_temperatures()
                 if temps:
                     for name, entries in temps.items():
                         for entry in entries:
                             info[f"{name}_{entry.label}"] = entry.current
-
+            log.info("System info collected")
             return info
         except Exception as e:
+            log.error(f"Error while getting system info: {e}")
             return str(e)

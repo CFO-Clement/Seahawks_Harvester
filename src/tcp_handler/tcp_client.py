@@ -7,6 +7,7 @@ import threading
 
 from logger import Log
 from metric_collector import MetricCollector
+from nmap_scanner import NMAPHandler
 
 log = Log("tcp_handler")
 
@@ -63,7 +64,9 @@ class TCPClient:
 
     def receive_messages(self):
         while True:
-            response = self._process_recv().decode('utf-8')
+            response = self._process_recv()
+            log.debug(f"Raw server command: {response}")
+            response = response.decode('utf-8')
             log.info(f"Server command: {response}")
             if response == "HEARTBEAT":
                 self.client_socket.sendall(self._preprocess_send('HEARTBEAT'))
@@ -82,7 +85,17 @@ class TCPClient:
                 log.info(f"Info sent")
 
             elif response.startswith("NMAP"):
-                raise NotImplementedError("NMAP is not implemented yet")
+                log.info(f"Handling NMAP command from server")
+                handler = NMAPHandler()
+                try:
+                    response = handler.handle_command(response)
+                except NotImplementedError as e:
+                    response = {
+                        "status": "error",
+                        "message": str(e)
+                    }
+                self.client_socket.sendall(self._preprocess_send(response))
+                log.info(f"NMAP result sent")
 
     def close(self):
         if self.client_socket:
