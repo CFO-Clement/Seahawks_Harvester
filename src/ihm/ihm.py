@@ -1,8 +1,8 @@
 import threading
-import time
 import tkinter as tk
 
 import psutil
+import time
 
 from logger import Log
 

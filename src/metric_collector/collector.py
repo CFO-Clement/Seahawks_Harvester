@@ -6,7 +6,6 @@ from datetime import datetime
 
 import nmap
 import psutil
-import requests
 
 from logger import Log
 
@@ -88,7 +87,7 @@ class MetricCollector:
             info['mac_address'] = ':'.join(
                 ['{:02x}'.format((uuid.getnode() >> elements) & 0xff) for elements in range(0, 2 * 6, 2)][::-1])
             info['private_ip'] = socket.gethostbyname(socket.gethostname())
-            info['public_ip'] = "my ip" #requests.get('https://api.ipify.org').text
+            info['public_ip'] = "my ip"  # requests.get('https://api.ipify.org').text
 
             # Espace disque
             log.debug("Getting disk space")

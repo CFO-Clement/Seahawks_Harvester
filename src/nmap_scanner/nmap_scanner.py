@@ -1,9 +1,12 @@
 import json
+
 import nmap
 
 # Assuming the logger setup is correctly defined elsewhere
 from logger import Log
+
 log = Log("nmap_scanner")
+
 
 class NMAPHandler:
     def __init__(self):
@@ -16,7 +19,7 @@ class NMAPHandler:
             scan_result = self.scanner.scan(hosts=hosts, arguments=arguments)
             log.debug("Scan completed")
 
-            #Processing scan results for easier interpretation
+            # Processing scan results for easier interpretation
             processed_results = {host: self.scanner[host] for host in self.scanner.all_hosts()}
             log.debug("Scan results processed")
             return {"status": "success", "results": processed_results}
@@ -29,7 +32,8 @@ class NMAPHandler:
         parts = command.split(maxsplit=2)
         if len(parts) < 3:
             log.error("Invalid command format. Expected: NMAP <hosts> <arguments>")
-            return json.dumps({"status": "error", "message": "Invalid command format. Expected: NMAP <hosts> <arguments>"}, indent=4)
+            return json.dumps(
+                {"status": "error", "message": "Invalid command format. Expected: NMAP <hosts> <arguments>"}, indent=4)
 
         _, hosts, arguments = parts
 
@@ -45,9 +49,4 @@ class NMAPHandler:
         log.debug(f"Command handled, returning {response}")
         return json.dumps(response, indent=4)
 
-# Usage example
-if __name__ == "__main__":
-    nmap_handler = NMAPHandler()
-    command = "NMAP 127.0.0.1 -sV"
-    response = nmap_handler.handle_command(command)
-    print(response)
+

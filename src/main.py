@@ -1,4 +1,5 @@
 import os
+
 from time import sleep
 
 from ihm import SystemMetricsDashboard
@@ -8,7 +9,7 @@ from tcp_handler import TCPClient
 
 log = Log("main")
 
-harvester_id = os.getenv('HARVESTER_NAME', "dev2")
+harvester_id = os.getenv('HARVESTER_NAME', "dev")
 harvester_frequency = int(os.getenv('HARVESTER_FREQUENCY', "1000"))
 nester_endpoint = os.getenv('NESTER_ENDPOINT', "localhost")
 nester_port = int(os.getenv('NESTER_PORT', "5001"))
