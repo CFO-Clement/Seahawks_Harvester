@@ -1,0 +1,33 @@
+digraph "packages_Harvester" {
+rankdir=BT
+charset="utf-8"
+"app" [color="#77AADD", label=<app>, shape="box", style="filled"];
+"ihm" [color="#99DDFF", label=<ihm>, shape="box", style="filled"];
+"ihm.ihm" [color="#99DDFF", label=<ihm.ihm>, shape="box", style="filled"];
+"logger" [color="#44BB99", label=<logger>, shape="box", style="filled"];
+"logger.logger" [color="#44BB99", label=<logger.logger>, shape="box", style="filled"];
+"metric_collector" [color="#BBCC33", label=<metric_collector>, shape="box", style="filled"];
+"metric_collector.collector" [color="#BBCC33", label=<metric_collector.collector>, shape="box", style="filled"];
+"nmap_scanner" [color="#AAAA00", label=<nmap_scanner>, shape="box", style="filled"];
+"nmap_scanner.nmap_scanner" [color="#AAAA00", label=<nmap_scanner.nmap_scanner>, shape="box", style="filled"];
+"tcp_handler" [color="#EEDD88", label=<tcp_handler>, shape="box", style="filled"];
+"tcp_handler.tcp_base" [color="#EEDD88", label=<tcp_handler.tcp_base>, shape="box", style="filled"];
+"tcp_handler.tcp_client" [color="#EEDD88", label=<tcp_handler.tcp_client>, shape="box", style="filled"];
+"app" -> "ihm" [arrowhead="open", arrowtail="none"];
+"app" -> "logger" [arrowhead="open", arrowtail="none"];
+"app" -> "tcp_handler" [arrowhead="open", arrowtail="none"];
+"ihm" -> "ihm" [arrowhead="open", arrowtail="none"];
+"ihm.ihm" -> "logger" [arrowhead="open", arrowtail="none"];
+"logger" -> "logger" [arrowhead="open", arrowtail="none"];
+"metric_collector" -> "metric_collector.collector" [arrowhead="open", arrowtail="none"];
+"metric_collector.collector" -> "logger" [arrowhead="open", arrowtail="none"];
+"nmap_scanner" -> "nmap_scanner" [arrowhead="open", arrowtail="none"];
+"nmap_scanner.nmap_scanner" -> "logger" [arrowhead="open", arrowtail="none"];
+"tcp_handler" -> "tcp_handler.tcp_base" [arrowhead="open", arrowtail="none"];
+"tcp_handler" -> "tcp_handler.tcp_client" [arrowhead="open", arrowtail="none"];
+"tcp_handler.tcp_base" -> "logger" [arrowhead="open", arrowtail="none"];
+"tcp_handler.tcp_client" -> "logger" [arrowhead="open", arrowtail="none"];
+"tcp_handler.tcp_client" -> "metric_collector" [arrowhead="open", arrowtail="none"];
+"tcp_handler.tcp_client" -> "nmap_scanner" [arrowhead="open", arrowtail="none"];
+"tcp_handler.tcp_client" -> "tcp_handler.tcp_base" [arrowhead="open", arrowtail="none"];
+}

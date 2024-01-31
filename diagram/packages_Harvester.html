@@ -1,0 +1,51 @@
+<html>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <div class="mermaid">
+    
+        classDiagram
+          class app {
+          }
+          class ihm {
+          }
+          class ihm {
+          }
+          class logger {
+          }
+          class logger {
+          }
+          class metric_collector {
+          }
+          class collector {
+          }
+          class nmap_scanner {
+          }
+          class nmap_scanner {
+          }
+          class tcp_handler {
+          }
+          class tcp_base {
+          }
+          class tcp_client {
+          }
+          app --> ihm
+          app --> logger
+          app --> tcp_handler
+          ihm --> ihm
+          ihm --> logger
+          logger --> logger
+          metric_collector --> collector
+          collector --> logger
+          nmap_scanner --> nmap_scanner
+          nmap_scanner --> logger
+          tcp_handler --> tcp_base
+          tcp_handler --> tcp_client
+          tcp_base --> logger
+          tcp_client --> logger
+          tcp_client --> metric_collector
+          tcp_client --> nmap_scanner
+          tcp_client --> tcp_base
+  
+       </div>
+  </body>
+</html>

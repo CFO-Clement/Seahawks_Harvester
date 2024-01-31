@@ -3,3 +3,5 @@ python-nmap
 pymongo
 colorama
 requests
+python-dotenv
+tk

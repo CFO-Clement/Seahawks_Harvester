@@ -1,0 +1,11 @@
+digraph "classes_Harvester" {
+rankdir=BT
+charset="utf-8"
+"logger.logger.Log" [color="#44BB99", fontcolor="black", label=<{Log|lock : lock<br ALIGN="LEFT"/>logger : NoneType, RootLogger<br ALIGN="LEFT"/>|critical(message)<br ALIGN="LEFT"/>debug(message)<br ALIGN="LEFT"/>error(message)<br ALIGN="LEFT"/>info(message)<br ALIGN="LEFT"/>log(level, message)<br ALIGN="LEFT"/>warning(message)<br ALIGN="LEFT"/>}>, shape="record", style="filled"];
+"metric_collector.collector.MetricCollector" [color="#BBCC33", fontcolor="black", label=<{MetricCollector|collector_name<br ALIGN="LEFT"/>nm : PortScanner<br ALIGN="LEFT"/>|collect_cpu_metrics()<br ALIGN="LEFT"/>collect_disk_metrics()<br ALIGN="LEFT"/>collect_memory_metrics()<br ALIGN="LEFT"/>generate_json()<br ALIGN="LEFT"/>get_system_info()<br ALIGN="LEFT"/>}>, shape="record", style="filled"];
+"nmap_scanner.nmap_scanner.NMAPHandler" [color="#AAAA00", fontcolor="black", label=<{NMAPHandler|scanner : PortScanner<br ALIGN="LEFT"/>|handle_command(command)<br ALIGN="LEFT"/>scan(hosts, arguments)<br ALIGN="LEFT"/>}>, shape="record", style="filled"];
+"ihm.ihm.SystemMetricsDashboard" [color="#99DDFF", fontcolor="black", label=<{SystemMetricsDashboard|cpu_label : Label<br ALIGN="LEFT"/>disk_label : Label<br ALIGN="LEFT"/>metrics : dict<br ALIGN="LEFT"/>ram_label : Label<br ALIGN="LEFT"/>running : Event<br ALIGN="LEFT"/>update_metrics_thread : NoneType, Thread<br ALIGN="LEFT"/>|fetch_metrics()<br ALIGN="LEFT"/>start_dashboard(stop_event)<br ALIGN="LEFT"/>stop_dashboard()<br ALIGN="LEFT"/>update_metrics_ui(stop_event)<br ALIGN="LEFT"/>}>, shape="record", style="filled"];
+"tcp_handler.tcp_base.TCPBase" [color="#EEDD88", fontcolor="black", label=<{TCPBase|socket : NoneType<br ALIGN="LEFT"/>stop_event<br ALIGN="LEFT"/>|}>, shape="record", style="filled"];
+"tcp_handler.tcp_client.TCPClient" [color="#EEDD88", fontcolor="black", label=<{TCPClient|client_id<br ALIGN="LEFT"/>client_socket : NoneType, socket<br ALIGN="LEFT"/>server_host<br ALIGN="LEFT"/>server_port<br ALIGN="LEFT"/>thread : NoneType, Thread<br ALIGN="LEFT"/>|close()<br ALIGN="LEFT"/>connect()<br ALIGN="LEFT"/>receive_messages()<br ALIGN="LEFT"/>run()<br ALIGN="LEFT"/>start()<br ALIGN="LEFT"/>}>, shape="record", style="filled"];
+"tcp_handler.tcp_client.TCPClient" -> "tcp_handler.tcp_base.TCPBase" [arrowhead="empty", arrowtail="none"];
+}

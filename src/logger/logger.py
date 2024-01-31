@@ -7,7 +7,16 @@ init(autoreset=True)
 
 
 class Log:
+    """
+    Logging class, responsible for logging
+    """
+
     def __init__(self, name="my_logger", log_file=None):
+        """
+        Initialize the logger
+        :param name: The name of the logger
+        :param log_file: The log file to log to
+        """
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
@@ -27,6 +36,12 @@ class Log:
         self.lock = threading.Lock()
 
     def log(self, level, message):
+        """
+        Log a message to the logger
+        :param level: The level of the message
+        :param message: The message to log
+        :return: None
+        """
         with self.lock:
             if level == "debug":
                 self.logger.debug(Fore.CYAN + Style.BRIGHT + message)

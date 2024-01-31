@@ -1,0 +1,63 @@
+<html>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <div class="mermaid">
+    
+        classDiagram
+          class Log {
+            lock : lock
+            logger : NoneType, RootLogger
+            critical(message)
+            debug(message)
+            error(message)
+            info(message)
+            log(level, message)
+            warning(message)
+          }
+          class MetricCollector {
+            collector_name
+            nm : PortScanner
+            collect_cpu_metrics()
+            collect_disk_metrics()
+            collect_memory_metrics()
+            generate_json()
+            get_system_info()
+          }
+          class NMAPHandler {
+            scanner : PortScanner
+            handle_command(command)
+            scan(hosts, arguments)
+          }
+          class SystemMetricsDashboard {
+            cpu_label : Label
+            disk_label : Label
+            metrics : dict
+            ram_label : Label
+            running : Event
+            update_metrics_thread : NoneType, Thread
+            fetch_metrics()
+            start_dashboard(stop_event)
+            stop_dashboard()
+            update_metrics_ui(stop_event)
+          }
+          class TCPBase {
+            socket : NoneType
+            stop_event
+          }
+          class TCPClient {
+            client_id
+            client_socket : NoneType, socket
+            server_host
+            server_port
+            thread : NoneType, Thread
+            close()
+            connect()
+            receive_messages()
+            run()
+            start()
+          }
+          TCPClient --|> TCPBase
+  
+       </div>
+  </body>
+</html>

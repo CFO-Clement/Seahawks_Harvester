@@ -6,20 +6,31 @@ from datetime import datetime
 
 import nmap
 import psutil
-
 from logger import Log
 
 log = Log("collector")
 
 
 class MetricCollector:
+    """
+    Metric Collector class, responsible for collecting system metrics
+    """
+
     def __init__(self, collector_name):
+        """
+        Initialize the MetricCollector
+        :param collector_name: The name of the collector
+        """
         log.debug("Initializing MetricCollector")
         self.collector_name = collector_name
         self.nm = nmap.PortScanner()
         log.debug("MetricCollector initialized")
 
     def collect_cpu_metrics(self):
+        """
+        Collect CPU metrics
+        :return: CPU metrics
+        """
         log.debug("Collecting CPU metrics")
         cpu_usage = psutil.cpu_percent(interval=1)
         cores = psutil.cpu_count()
@@ -27,6 +38,10 @@ class MetricCollector:
         return {"usage": f"{cpu_usage}%", "cores": cores, "temperature": "N/A"}
 
     def collect_memory_metrics(self):
+        """
+        Collect memory metrics
+        :return: Memory metrics
+        """
         log.debug("Collecting memory metrics")
         memory = psutil.virtual_memory()
         log.debug("Memory metrics collected")
@@ -37,6 +52,10 @@ class MetricCollector:
         }
 
     def collect_disk_metrics(self):
+        """
+        Collect disk metrics
+        :return: Disk metrics
+        """
         log.debug("Collecting disk metrics")
         disks = []
         for partition in psutil.disk_partitions():
@@ -51,6 +70,10 @@ class MetricCollector:
         return disks
 
     def generate_json(self):
+        """
+        Generate JSON with the collected metrics
+        :return: JSON with the collected metrics
+        """
         log.debug("Generating JSON")
         data = {
             "collectorName": self.collector_name,
@@ -66,6 +89,10 @@ class MetricCollector:
 
     @staticmethod
     def get_system_info():
+        """
+        Get system information
+        :return: System information
+        """
         log.debug("Getting system info")
         try:
             info = {}

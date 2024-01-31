@@ -1,25 +1,34 @@
 import json
 
 import nmap
-
-# Assuming the logger setup is correctly defined elsewhere
 from logger import Log
 
 log = Log("nmap_scanner")
 
 
 class NMAPHandler:
+    """
+    NMAP Handler class, responsible for scanning hosts with NMAP
+    """
+
     def __init__(self):
+        """
+        Initialize the NMAPHandler
+        """
         log.debug("Initializing NMAPHandler")
         self.scanner = nmap.PortScanner()
 
     def scan(self, hosts, arguments):
+        """
+        Scan hosts with NMAP
+        :param hosts: The hosts to scan
+        :param arguments: The arguments to scan with
+        :return: The scan results
+        """
+        log.debug(f"Scanning {hosts} with arguments {arguments}")
         try:
-            log.debug(f"Scanning {hosts} with arguments {arguments}")
             scan_result = self.scanner.scan(hosts=hosts, arguments=arguments)
             log.debug("Scan completed")
-
-            # Processing scan results for easier interpretation
             processed_results = {host: self.scanner[host] for host in self.scanner.all_hosts()}
             log.debug("Scan results processed")
             return {"status": "success", "results": processed_results}
@@ -28,6 +37,11 @@ class NMAPHandler:
             return {"status": "error", "message": str(e)}
 
     def handle_command(self, command):
+        """
+        Handle a command from the Nester server
+        :param command: The command to handle
+        :return: The command results
+        """
         log.debug(f"Handling command {command}")
         parts = command.split(maxsplit=2)
         if len(parts) < 3:
@@ -39,7 +53,6 @@ class NMAPHandler:
 
         scan_results = self.scan(hosts, arguments)
 
-        # Packaging the answer in a JSON format
         response = {
             "status": scan_results["status"],
             "command": command,
@@ -48,5 +61,3 @@ class NMAPHandler:
         }
         log.debug(f"Command handled, returning {response}")
         return json.dumps(response, indent=4)
-
-
