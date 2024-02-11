@@ -20,7 +20,7 @@ docker-compose --env-file %ENV_FILE% build
 goto :eof
 
 :build_dockerfile
-docker build --build-arg NESTER_PORT=!NESTER_PORT! -t harverster_image .
+docker build -t harverster_image .
 goto :eof
 
 :main

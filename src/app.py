@@ -32,10 +32,10 @@ if __name__ == '__main__':
     stop_event = threading.Event()
 
     log.info("Starting TCP server")
-    client = TCPClient(nester_endpoint, nester_port, harvester_id, stop_event)
+    #client = TCPClient(nester_endpoint, nester_port, harvester_id, stop_event)
 
     log.info("Connecting to TCP server")
-    client.start()
+    #client.start()
 
     log.info("Starting dashboard app")
     app = SystemMetricsDashboard()

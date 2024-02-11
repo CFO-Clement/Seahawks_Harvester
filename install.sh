@@ -20,7 +20,7 @@ build_compose() {
 }
 
 build_dockerfile() {
-    sudo docker build --build-arg NESTER_PORT=${NESTER_PORT} -t harverster_image .
+    sudo docker build -t harverster_image .
 }
 
 main() {

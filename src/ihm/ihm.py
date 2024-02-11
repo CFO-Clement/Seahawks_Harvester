@@ -1,16 +1,18 @@
 import threading
 import time
 import tkinter as tk
-
+import tkinter.scrolledtext as st
 import psutil
-from logger import Log
 
+from logger import Log
+from nmap_scanner import NMAPHandler
 log = Log("ihm")
 
 
 class SystemMetricsDashboard(tk.Tk):
     """
     System Metrics Dashboard class, responsible for displaying system metrics
+    and sending nmap commands
     """
 
     def __init__(self):
@@ -20,7 +22,7 @@ class SystemMetricsDashboard(tk.Tk):
         log.debug("Initializing SystemMetricsDashboard")
         super().__init__()
         self.title("System Metrics Dashboard")
-        self.geometry("400x300")
+        self.geometry("600x400")  # Augmenté pour accueillir la sortie de nmap
 
         self.cpu_label = tk.Label(self, text="CPU Usage:")
         self.cpu_label.pack()
@@ -30,6 +32,17 @@ class SystemMetricsDashboard(tk.Tk):
 
         self.disk_label = tk.Label(self, text="Disk Usage:")
         self.disk_label.pack()
+
+        # Interface pour nmap
+        self.nmap_frame = tk.Frame(self)
+        self.nmap_frame.pack(pady=10)
+        self.nmap_entry = tk.Entry(self.nmap_frame, width=50)
+        self.nmap_entry.pack(side=tk.LEFT)
+        self.nmap_button = tk.Button(self.nmap_frame, text="Run nmap", command=self.run_nmap_command)
+        self.nmap_button.pack(side=tk.LEFT)
+
+        self.nmap_output = st.ScrolledText(self, height=100)
+        self.nmap_output.pack()
 
         # Variables pour stocker les métriques
         self.metrics = {
@@ -75,6 +88,20 @@ class SystemMetricsDashboard(tk.Tk):
         if self.running.is_set():
             self.after(1000, lambda: self.update_metrics_ui(stop_event))
 
+    def run_nmap_command(self):
+        """
+        Placeholder function to run nmap command and update the output widget
+        """
+        command = self.nmap_entry.get()
+        nmap_handler = NMAPHandler()
+        output = nmap_handler.handle_command(f"NMAP {command}")
+
+        self.nmap_output.insert(tk.END, output + "\n")
+        self.nmap_output.yview(tk.END)
+        # If you want to execute the actual nmap command, you might use:
+        # output = subprocess.check_output(command, shell=True).decode()
+        # Remember to handle exceptions and errors!
+
     def start_dashboard(self, stop_event):
         """
         Start the SystemMetricsDashboard
@@ -98,3 +125,9 @@ class SystemMetricsDashboard(tk.Tk):
             self.update_metrics_thread.join()
         log.info("all thread are quiting")
         self.quit()
+
+
+if __name__ == "__main__":
+    app = SystemMetricsDashboard()
+    app.start_dashboard(threading.Event())  # Pass a threading.Event() as the stop event
+    app.mainloop()
