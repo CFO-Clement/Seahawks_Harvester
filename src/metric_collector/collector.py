@@ -162,6 +162,7 @@ class MetricCollector:
                         for entry in entries:
                             info[f"{name}_{entry.label}"] = entry.current
             log.info("System info collected")
+            open('info.json', 'w').write(json.dumps(info, indent=2))
             return info
         except Exception as e:
             log.error(f"Error while getting system info: {e}")

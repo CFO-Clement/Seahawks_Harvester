@@ -15,6 +15,9 @@ if [ "$#" -gt 0 ]; then
         start_compose
     elif [ "$1" = "docker" ]; then
         start_docker
+    elif [ "$1" = "update" ]; then
+        ./update.sh
+        ./install.sh
     else
         echo "Argument invalide: $1"
         echo "Utilisation: $0 [compose|docker]"

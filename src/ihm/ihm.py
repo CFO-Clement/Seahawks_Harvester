@@ -61,7 +61,6 @@ class SystemMetricsDashboard(tk.Tk):
         :param stop_event: The stop event
         :return: None
         """
-        log.debug("Updating UI")
         if stop_event.is_set():
             log.critical("Critical error detected")
             log.info("Stopping UI")
