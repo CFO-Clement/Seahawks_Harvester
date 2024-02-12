@@ -6,11 +6,11 @@ services:
       - .:/app
       # Pour Linux, le partage du socket X11 fonctionne directement.
       # Sous Windows/macOS, cette ligne peut être ignorée ou adaptée si vous utilisez un serveur X compatible.
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    environment:
+      #- /tmp/.X11-unix:/tmp/.X11-unix
+    #environment:
       # Sous Linux, cela fonctionne si vous avez configuré `xhost` correctement.
       # Sous Windows avec VcXsrv ou sous macOS avec XQuartz, vous pourriez avoir besoin de définir DISPLAY à host.docker.internal:0 ou une adresse IP spécifique.
-      - DISPLAY=${DISPLAY}
+      #- DISPLAY=${DISPLAY}
     env_file:
       - config.env
     ports:
